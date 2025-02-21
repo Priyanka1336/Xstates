@@ -1,9 +1,11 @@
 import React from "react";
-import { getCountry, getCities, getStates } from "../api/api";
+import { useApi } from "../api/api";
 import { useEffect, useState } from "react";
+
 import "./Home.css";
 
 export default function HomePage() {
+  const { getCountry, getStates, getCities } = useApi();
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
