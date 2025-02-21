@@ -1,36 +1,38 @@
 import axios from "axios";
 
+const BASE_URL = "https://crio-location-selector.onrender.com";
+
 export const getCountry = async () => {
   try {
-    const response = await axios.get(
-      " https://crio-location-selector.onrender.com/countries"
-    );
-    return response;
+    const response = await axios.get(`${BASE_URL}/countries`);
+    return response.data; // Return only the data instead of the entire response
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching countries:", error.message);
+    return null; // Return null instead of undefined
   }
 };
 
 export const getStates = async (country) => {
   try {
-    const response = await axios.get(
-      `https://crio-location-selector.onrender.com/country=${country}/states`
-    );
-    return response;
+    const response = await axios.get(`${BASE_URL}/country/${country}/states`);
+    return response.data;
   } catch (error) {
-    console.error(error);
+    console.error(`Error fetching states for ${country}:`, error.message);
+    return null;
   }
 };
 
 export const getCities = async (country, state) => {
   try {
     const response = await axios.get(
-      ` https://crio-location-selector.onrender.com/country=${country}/state=${state}/cities`
+      `${BASE_URL}/country/${country}/state/${state}/cities`
     );
-    console.log("geting cities");
-    console.log(response.data);
-    return response;
+    return response.data;
   } catch (error) {
-    console.error(error);
+    console.error(
+      `Error fetching cities for ${state}, ${country}:`,
+      error.message
+    );
+    return null;
   }
 };
