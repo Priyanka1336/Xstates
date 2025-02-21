@@ -1,10 +1,12 @@
 import React from "react";
 import { useApi } from "../api/api";
 import { useEffect, useState } from "react";
+import { useSnackbar } from "notistack";
 
 import "./Home.css";
 
 export default function HomePage() {
+  const { enqueueSnackbar } = useSnackbar();
   const { getCountry, getStates, getCities } = useApi();
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
@@ -19,7 +21,17 @@ export default function HomePage() {
   useEffect(() => {
     const apiCall = async () => {
       const response = await getCountry();
-      setCountries(response.data);
+      if (response) {
+        setCountries(response.data);
+      } else {
+        enqueueSnackbar(
+          "Please choose another country. Can't fetch data for this one",
+          {
+            variant: "error",
+            anchorOrigin: { vertical: "top", horizontal: "right" },
+          }
+        );
+      }
     };
     apiCall();
   }, []);
@@ -29,7 +41,17 @@ export default function HomePage() {
     const apiCall = async () => {
       if (selectedCountry) {
         const response = await getStates(selectedCountry);
-        setStates(response.data);
+        if (response) {
+          setStates(response.data);
+        } else {
+          enqueueSnackbar(
+            "Please choose another country/state. Can't fetch data for this one",
+            {
+              variant: "error",
+              anchorOrigin: { vertical: "top", horizontal: "right" },
+            }
+          );
+        }
       }
     };
     apiCall();
@@ -39,7 +61,17 @@ export default function HomePage() {
     const apiCall = async () => {
       if (selectedState) {
         const response = await getCities(selectedCountry, selectedState);
-        setCities(response.data);
+        if (response) {
+          setCities(response.data);
+        } else {
+          enqueueSnackbar(
+            "Please choose another country/state/city. Can't fetch data for this one",
+            {
+              variant: "error",
+              anchorOrigin: { vertical: "top", horizontal: "right" },
+            }
+          );
+        }
       }
     };
     apiCall();
